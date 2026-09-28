@@ -1,32 +1,42 @@
-# React + TypeScript + Vite
+# Duplicate File Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Duplicate File Manager is a Windows WPF application for finding exact duplicate files in a selected folder tree. It scans locally and does not upload file contents.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Native Windows folder selection with a persistent scan root.
+- Exact duplicate detection using file size, a fast first-and-last-chunk fingerprint, and final SHA-256 confirmation.
+- Bounded parallel hashing for faster scans.
+- Expandable duplicate groups with file paths, sizes, modified dates, and removal selection.
+- Cooperative scan cancellation that preserves the previous completed results.
+- Naming protection for Whisparr, Radarr, or Sonarr managed files.
+- Configurable `config.xml` paths for all three naming-rule providers.
+- Explicit confirmation before permanently deleting selected files.
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Windows
+- .NET 10 SDK
 
-## Expanding the Oxlint configuration
+## Build And Run
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+From the repository root:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+dotnet build .\DuplicateFileManager.Wpf\DuplicateFileManager.Wpf.csproj
+dotnet run --project .\DuplicateFileManager.Wpf\DuplicateFileManager.Wpf.csproj
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Usage
+
+1. Select a naming-protection provider from the sidebar, or choose `No naming protection`.
+2. Open **Settings** if Whisparr, Radarr, or Sonarr uses a nonstandard `config.xml` location.
+3. Select **Choose folder and scan** and choose the root directory.
+4. Review the duplicate groups. Files recognized as managed by the selected provider are not selected for removal automatically.
+5. Select unwanted copies and choose **Remove selected**. Deletion is permanent after confirmation.
+
+The selected scan root, naming provider, and provider config paths are saved under `%LOCALAPPDATA%\DuplicateFileManager\settings.json`.
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
